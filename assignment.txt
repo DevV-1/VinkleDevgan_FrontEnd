@@ -8,4 +8,83 @@ The WrappedListComponent maps through the items array prop, rendering a SingleLi
 The List component is now exported and wrapped with the memo() function, which helps to optimize performance by only re-rendering the component when its props or state changes.
 Overall, the List component in this code allows you to display a list of items with a selectable item feature using React.
 
-Ques-2
+Ques-2: What problems / warnings are there with code?
+Answer:
+1. The isSelected prop in the WrappedSingleListItem is passed incorrectly. It should be passed as a boolean value indicating whether or not the current item is selected, but it is being passed as a reference to the selectedIndex state variable instead. 
+2. The setSelectedIndex function in the WrappedListComponent is not used correctly. The useState hook returns an array containing two elements - the current state value and a function to update the state.
+3. The onClickHandler prop in the WrappedSingleListItem is not defined correctly. The onClickHandler prop is passed as a function that calls handleClick with the item's index, but the onClickHandler function itself is not defined correctly.
+4. The PropTypes definition for the items prop in the WrappedListComponent is incorrect. The correct syntax for defining the items prop as an array of objects with a text property is items: PropTypes.arrayOf(PropTypes.shape({ text: PropTypes.string.isRequired })).isRequired.
+
+Ques-3: Please fix, optimize, and/or modify the component as much as you think is necessary.
+Answer:
+
+import React, { useState, useEffect, memo } from 'react';
+import PropTypes from 'prop-types';
+const WrappedSingleListItem = ({
+  index,
+  isSelected,
+  onClickHandler,
+  text,
+}) => {
+  return (
+    <li
+      style={{ backgroundColor: isSelected ? 'green' : 'red'}}
+      onClick={() => onClickHandler(index)}
+    >
+      {text}
+    </li>
+  );
+};
+
+WrappedSingleListItem.propTypes = {
+  index: PropTypes.number,
+  isSelected: PropTypes.bool,
+  onClickHandler: PropTypes.func.isRequired,
+  text: PropTypes.string.isRequired,
+};
+
+const SingleListItem = memo(WrappedSingleListItem);
+
+const WrappedListComponent = ({
+  items = [],
+}) => {
+  const [selectedIndex, setSelectedIndex] = useState(null);
+
+  useEffect(() => {
+    setSelectedIndex(null);
+  }, [items]);
+
+  const handleClick = index => {
+    setSelectedIndex(index);
+  };
+
+  return (
+    <ul style={{ textAlign: 'left' }}>
+      {items.map((item, index) => (
+        <SingleListItem
+          onClickHandler={() => handleClick(index)}
+          text={item.text}
+          index={index}
+          isSelected={index === selectedIndex}
+        />
+      ))}
+    </ul>
+  )
+};
+
+WrappedListComponent.propTypes = {
+  items: PropTypes.arrayOf(PropTypes.shape({
+    text: PropTypes.string.isRequired,
+  })),
+};
+
+const List = memo(WrappedListComponent);
+
+export default List;
+
+Here, the state variable selectedIndex is initialized with a value of null and set to null whenever the items prop changes using the useEffect hook. In the SingleListItem component, the onClickHandler function is invoked with the index of the item as an argument, and the isSelected prop is set to true only if the index of the current item matches the selected index in the state. Also, the default value for the items prop is an empty array, and the items prop is defined as an array of objects with a required text property using PropTypes.
+
+Name: Vinkle Devgan
+Registration Number: 12002585
+Email: devganvinkle@gmail.com
+Mobile: 7658859558
