@@ -1,0 +1,11 @@
+STEELEYE LIMITED FRONTEND ENGINEER ASSIGNMENT
+Ques-1: Explain what the simple List component does.
+Answer:
+This code defines a list component in React that displays a list of items with a selectable item feature. The List component takes an array of items as a prop and renders them as a bulleted list using the ul component. 
+The code also includes a SingleListItem component which is a simple component used to render an individual list item in the ul. The WrappedSingleListItem component renders an li tag and applies some CSS styles to change the background color based on whether or not the item is selected. It also defines a click event handler that is passed to the li tag.
+The WrappedListComponent is a higher-level component that renders a list of items using the SingleListItem component. It initializes the selectedIndex state variable using the useState() hook to keep track of the currently selected item's index. It also defines a handleClick function that is called when an item is clicked, updating the selectedIndex state with the index of the clicked item.
+The WrappedListComponent maps through the items array prop, rendering a SingleListItem component for each item. It passes the text, index, and isSelected props to each SingleListItem component, along with a click event handler that calls handleClick and passes the index of the item.
+The List component is now exported and wrapped with the memo() function, which helps to optimize performance by only re-rendering the component when its props or state changes.
+Overall, the List component in this code allows you to display a list of items with a selectable item feature using React.
+
+Ques-2
